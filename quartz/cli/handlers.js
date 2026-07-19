@@ -565,9 +565,9 @@ export async function handleBuild(argv) {
     server.listen(argv.port)
     const wss = new WebSocketServer({ port: argv.wsPort })
     wss.on("error", (err) => {
-      if (err.code === "EADDRINUSE") {
+      if (err.code === "EADDRINUSE" || err.code === "EACCES") {
         console.error(
-          `WebSocket port ${argv.wsPort} is already in use. Try a different port with --wsPort <number>`,
+          `WebSocket port ${argv.wsPort} is unavailable. Try a different port with --wsPort <number>`,
         )
         process.exit(1)
       }
