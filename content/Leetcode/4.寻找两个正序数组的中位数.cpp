@@ -1,0 +1,60 @@
+// TODO 为什么count_le使用upper_bound?
+// A: 记录<=x的元素总数应该使用upper_bound而不是lower_bound
+// TODO 为什么要初始化left = INT_MAX, right = INT_MIN?
+// A: 这个初始化是为了兼容 “其中一个 / 两个数组为空” 的边界场景，同时保证非空时能正确取到数组的最小 / 最大值
+
+#include <algorithm>// 包含 upper_bound 函数
+#include <climits>  // 包含 INT_MIN/INT_MAX
+#include <cmath>    // 可选，用于浮点数计算
+#include <vector>
+
+using namespace std;
+
+class Solution {
+public:
+    double findMedianSortedArrays(vector<int> &nums1, vector<int> &nums2) {
+        // 对应Python的count_less_equal函数：返回<=x的元素总数
+        auto count_less_equal = [&](int x) -> int {
+            // upper_bound 等价于Python的bisect.bisect_right
+            int cnt1 = upper_bound(nums1.begin(), nums1.end(), x) - nums1.begin();
+            int cnt2 = upper_bound(nums2.begin(), nums2.end(), x) - nums2.begin();
+            return cnt1 + cnt2;
+        };
+
+        // 对应Python的kth_smallest函数：找第k小的元素（0-based）
+        auto kth_smallest = [&](int k) -> int {
+            // 初始化左右边界，适配空数组情况（对应Python的float('inf')/-inf）
+            int left = INT_MAX;// 初始化为极大值
+            if (!nums1.empty()) left = min(left, nums1[0]);
+            if (!nums2.empty()) left = min(left, nums2[0]);
+
+            int right = INT_MIN;// 初始化为极小值
+            if (!nums1.empty()) right = max(right, nums1.back());
+            if (!nums2.empty()) right = max(right, nums2.back());
+
+            // 二分查找逻辑（与Python完全一致）
+            while (left <= right) {
+                int mid = (left + right) / 2;
+                if (count_less_equal(mid) <= k) {
+                    left = mid + 1;
+                } else {
+                    right = mid - 1;
+                }
+            }
+            return left;
+        };
+
+        int m = nums1.size(), n = nums2.size();
+        int total = m + n;
+
+        if (total % 2 == 1) {
+            // 奇数：返回第 total//2 小的元素（0-based）
+            return kth_smallest(total / 2);
+        } else {
+            // 偶数：返回两个中间值的平均值
+            int a = kth_smallest(total / 2 - 1);
+            int b = kth_smallest(total / 2);
+            return (a + b) / 2.0;
+        }
+    }
+};

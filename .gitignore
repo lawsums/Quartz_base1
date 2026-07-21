@@ -11,3 +11,7 @@ private/
 replit.nix
 .quartz/
 quartz/cli/tui/dist/
+
+# 本地同步脚本与日志（不提交）
+scripts/
+*.log
