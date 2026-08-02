@@ -1,0 +1,258 @@
+/* ==========================================================================
+   project-styles.css — 番剧/漫画卡片样式
+   使用 Quartz 主题变量自动适配亮色/暗色模式
+   ========================================================================== */
+
+/* ==================== 网格布局 ==================== */
+
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+  padding: 0;
+  list-style: none;
+}
+
+/* ==================== 卡片容器 ==================== */
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  border-radius: 12px;
+  overflow: hidden;
+  text-decoration: none;
+  background-color: var(--light);
+  border: 1px solid var(--lightgray);
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+  cursor: pointer;
+  /* 防止 flex 子项溢出 */
+  min-width: 0;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  border-color: var(--secondary);
+}
+
+/* ==================== 封面区域 ==================== */
+
+.project-card-cover {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  overflow: hidden;
+  background-color: var(--tertiary);
+}
+
+.project-card-cover img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.3s ease;
+}
+
+.project-card:hover .project-card-cover img {
+  transform: scale(1.05);
+}
+
+/* 无封面占位 */
+.project-card-no-cover {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 12px;
+  text-align: center;
+  font-size: 0.85rem;
+  color: var(--secondary);
+  word-break: break-all;
+}
+
+/* ==================== 状态徽章 ==================== */
+
+.project-card-badge {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  padding: 3px 10px;
+  border-radius: 20px;
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: #fff;
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+/* 状态颜色 */
+.project-card.status-已看 .project-card-badge,
+.project-card.status-已通关 .project-card-badge {
+  background-color: rgba(34, 139, 87, 0.85);
+}
+
+.project-card.status-想看 .project-card-badge,
+.project-card.status-想玩 .project-card-badge {
+  background-color: rgba(218, 138, 42, 0.85);
+}
+
+.project-card.status-在看 .project-card-badge,
+.project-card.status-在玩 .project-card-badge {
+  background-color: rgba(42, 118, 218, 0.85);
+}
+
+.project-card.status-搁置 .project-card-badge {
+  background-color: rgba(128, 128, 128, 0.85);
+}
+
+/* ==================== 类别标签 ==================== */
+
+.project-card-cat {
+  position: absolute;
+  top: 8px;
+  left: 8px;
+  padding: 2px 8px;
+  border-radius: 4px;
+  font-size: 0.68rem;
+  font-weight: 500;
+  color: var(--dark);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+}
+
+/* ==================== 信息区域 ==================== */
+
+.project-card-info {
+  padding: 10px 12px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  min-width: 0;
+}
+
+.project-card-title {
+  margin: 0;
+  font-size: 0.88rem;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--dark);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-card-subtitle {
+  font-size: 0.72rem;
+  color: var(--secondary);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.project-card-meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+  gap: 8px;
+}
+
+.project-card-rating {
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: #d4a017;
+  white-space: nowrap;
+}
+
+.project-card-year {
+  font-size: 0.72rem;
+  color: var(--tertiary);
+  white-space: nowrap;
+}
+
+/* ==================== 游戏卡片额外信息 ==================== */
+
+.project-card-game-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  margin-top: 4px;
+}
+
+.project-card-platform,
+.project-card-genre,
+.project-card-playtime {
+  font-size: 0.66rem;
+  padding: 1px 6px;
+  border-radius: 4px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.project-card-platform {
+  background-color: var(--tertiary);
+  color: var(--secondary);
+}
+
+.project-card-genre {
+  background-color: var(--lightgray);
+  color: var(--secondary);
+}
+
+.project-card-playtime {
+  color: var(--tertiary);
+  font-weight: 500;
+}
+
+/* ==================== 空状态与错误 ==================== */
+
+.project-empty,
+.project-error {
+  color: var(--tertiary);
+  font-size: 0.9rem;
+  padding: 16px 0;
+  text-align: center;
+}
+
+.project-error {
+  color: #c0392b;
+}
+
+/* ==================== 响应式 ==================== */
+
+@media (max-width: 800px) {
+  .project-grid {
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 12px;
+  }
+
+  .project-card-title {
+    font-size: 0.82rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .project-grid {
+    grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    gap: 10px;
+  }
+
+  .project-card-title {
+    font-size: 0.76rem;
+  }
+
+  .project-card-subtitle {
+    font-size: 0.66rem;
+  }
+
+  .project-card-meta {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 2px;
+  }
+}

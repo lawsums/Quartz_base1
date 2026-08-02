@@ -106,6 +106,9 @@ export default (() => {
             return resource
           }
         })}
+        {/* 番剧/漫画卡片 CSS/JS */}
+        <link rel="stylesheet" href="/static/project-styles.css" />
+        <script src="/static/project-query.js" defer></script>
       </head>
     )
   }
