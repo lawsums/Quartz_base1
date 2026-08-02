@@ -86,7 +86,7 @@
    * 生成单张卡片的 HTML
    */
   function renderCard(project) {
-    const cover = project.cover || ""
+    const cover = (project.cover || "").replace(/^http:\/\//, "https://")
     const title = escapeHtml(project.title)
     const subtitle = escapeHtml(project.subtitle || "")
     const status = project.status || ""
@@ -122,7 +122,7 @@
 
     return `<a href="${path}" class="project-card ${statusClass}" data-category="${category}">
       <div class="project-card-cover">
-        ${cover ? `<img src="${cover}" alt="${title}" loading="lazy" />` : `<div class="project-card-no-cover">${title}</div>`}
+        ${cover ? `<img src="${cover}" alt="${title}" loading="lazy" decoding="async" onerror="this.style.display='none';this.nextElementSibling.style.display='flex'" /><div class="project-card-no-cover" style="display:none">${title}</div>` : `<div class="project-card-no-cover">${title}</div>`}
         ${status ? `<span class="project-card-badge">${status}</span>` : ""}
         ${categoryLabel ? `<span class="project-card-cat">${categoryLabel}</span>` : ""}
       </div>
@@ -176,9 +176,11 @@
 
   /**
    * 初始化：fetch JSON → 渲染
+   * 添加 cache-busting 参数避免浏览器缓存旧 JSON
    */
   function init() {
-    fetch(JSON_URL)
+    const cacheBustUrl = JSON_URL + "?v=" + new Date().getTime()
+    fetch(cacheBustUrl, { cache: "no-cache" })
       .then((res) => {
         if (!res.ok) throw new Error(`HTTP ${res.status}`)
         return res.json()
