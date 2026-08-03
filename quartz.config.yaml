@@ -7,7 +7,7 @@ configuration:
   analytics:
     provider: plausible
   locale: en-US
-  baseUrl: lawsam.github.io
+  baseUrl: lawsums.github.io/Quartz_base1
   ignorePatterns:
     - private
     - templates

@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://lawsums.github.io/Quartz_base1/sitemap.xml
