@@ -1,62 +1,41 @@
 /**
- * project-query.js — 浏览器端读取 projects-index.json，在页面中的
- * <div data-project-query> 占位元素内渲染番剧/漫画卡片。
+ * project-query-inline.js — 与 project-query.js 逻辑相同，
+ * 但数据来自页面内嵌的 <script id="projects-data" type="application/json">，
+ * 跳过 fetch 请求，页面加载瞬间渲染。
  *
  * 支持的 data 属性：
  *   data-status="已看"       按状态筛选（已看/想看/在看）
  *   data-category="anime"    按类别筛选（anime/manga/game）
  *   data-sort="rating"       排序字段（rating/year/title/noteId）
  *   data-order="DESC"         排序方向（DESC 降序 / ASC 升序）
- *
- * 用法：在 Markdown 中写
- *   <div data-project-query data-status="已看" data-sort="rating" data-order="DESC"></div>
  */
 
 (function () {
   "use strict"
 
-  // 卡片占位符选择器
-  const QUERY_SELECTOR = "[data-project-query]"
-  // JSON 数据路径
-  const JSON_URL = "/static/projects-index.json"
+  const QUERY_SELECTOR = "[data-project-query-inline]"
 
-  /**
-   * 获取 URL 友好的路径（处理空格和特殊字符）
-   */
   function encodePath(path) {
-    // Quartz 生成的 URL 用空格而非 %20，保持一致
     return path
   }
 
-  /**
-   * 根据 data 属性筛选数据
-   */
   function filterProjects(projects, dataset) {
     let result = projects
-
-    // 按状态筛选
     if (dataset.status) {
       result = result.filter((p) => p.status === dataset.status)
     }
-
-    // 按类别筛选
     if (dataset.category) {
       result = result.filter((p) => p.category === dataset.category)
     }
-
     return result
   }
 
-  /**
-   * 排序数据
-   */
   function sortProjects(projects, dataset) {
     const sortField = dataset.sort || "rating"
     const order = (dataset.order || "DESC").toUpperCase() === "ASC" ? 1 : -1
 
     return [...projects].sort((a, b) => {
       let valA, valB
-
       switch (sortField) {
         case "rating":
           valA = a.rating || 0
@@ -69,7 +48,6 @@
         case "title":
           return order * a.title.localeCompare(b.title, "zh")
         case "noteId":
-          // noteId 是时间戳字符串，按字符串比较即可
           valA = a.noteId || ""
           valB = b.noteId || ""
           return order * valA.localeCompare(valB)
@@ -77,14 +55,10 @@
           valA = a.rating || 0
           valB = b.rating || 0
       }
-
       return (valA - valB) * order
     })
   }
 
-  /**
-   * 生成单张卡片的 HTML
-   */
   function renderCard(project) {
     const cover = (project.cover || "").replace(/^http:\/\//, "https://")
     const title = escapeHtml(project.title)
@@ -94,21 +68,16 @@
     const year = project.year || ""
     const category = project.category || ""
     const path = encodePath(project.path || "#")
-
-    // 状态 CSS 类名
     const statusClass = status ? `status-${status}` : ""
 
-    // 类别标签
     let categoryLabel = ""
     if (category === "manga") categoryLabel = "漫画"
     else if (category === "game") categoryLabel = "游戏"
 
-    // 游戏额外信息
     const platform = escapeHtml(project.platform || "")
     const genre = escapeHtml(project.genre || "")
     const playtime = escapeHtml(project.playtime || "")
 
-    // 游戏卡片额外行
     let gameMetaHtml = ""
     if (category === "game") {
       const metaParts = []
@@ -138,9 +107,6 @@
     </a>`
   }
 
-  /**
-   * HTML 转义
-   */
   function escapeHtml(str) {
     if (!str) return ""
     return str
@@ -151,16 +117,12 @@
       .replace(/'/g, "&#039;")
   }
 
-  /**
-   * 渲染所有占位容器
-   */
   function renderAll(projects) {
     const containers = document.querySelectorAll(QUERY_SELECTOR)
     if (containers.length === 0) return
 
     containers.forEach((container) => {
       const dataset = container.dataset
-
       let filtered = filterProjects(projects, dataset)
       filtered = sortProjects(filtered, dataset)
 
@@ -174,44 +136,20 @@
     })
   }
 
-  /**
-   * 显示加载中占位
-   */
-  function showLoading() {
-    const containers = document.querySelectorAll(QUERY_SELECTOR)
-    containers.forEach((container) => {
-      container.innerHTML = `<div class="project-grid-loading"><div class="project-grid-spinner"></div><p>加载中...</p></div>`
-    })
-  }
-
-  /**
-   * 初始化：fetch JSON → 渲染
-   * 添加 cache-busting 参数避免浏览器缓存旧 JSON
-   */
   function init() {
-    // 先显示加载占位，避免白屏
-    showLoading()
-
-    const cacheBustUrl = JSON_URL + "?v=" + new Date().getTime()
-    fetch(cacheBustUrl, { cache: "no-cache" })
-      .then((res) => {
-        if (!res.ok) throw new Error(`HTTP ${res.status}`)
-        return res.json()
-      })
-      .then((data) => {
-        renderAll(data)
-      })
-      .catch((err) => {
-        console.error("[project-query] 加载失败:", err)
-        // 在页面上显示错误提示
-        const containers = document.querySelectorAll(QUERY_SELECTOR)
-        containers.forEach((c) => {
-          c.innerHTML = `<p class="project-error">数据加载失败</p>`
-        })
-      })
+    const scriptTag = document.getElementById("projects-data")
+    if (!scriptTag) {
+      console.error("[project-query-inline] 找不到 #projects-data 脚本标签")
+      return
+    }
+    try {
+      const data = JSON.parse(scriptTag.textContent)
+      renderAll(data)
+    } catch (err) {
+      console.error("[project-query-inline] JSON 解析失败:", err)
+    }
   }
 
-  // 等待 DOM 加载完成
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", init)
   } else {

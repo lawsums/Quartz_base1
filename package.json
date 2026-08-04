@@ -21,8 +21,9 @@
     "install-plugins": "npx tsx ./quartz/plugins/loader/install-plugins.ts",
     "generate-projects": "node scripts/generate-projects.js",
     "cache-covers": "node scripts/cache-covers.js",
+    "generate-anime-pages": "node scripts/generate-anime-pages.js",
     "fetch-game": "node scripts/fetch-game.js",
-    "prebuild": "npm run install-plugins && npm run generate-projects && npm run cache-covers"
+    "prebuild": "npm run install-plugins && npm run generate-projects && npm run cache-covers && npm run generate-anime-pages"
   },
   "engines": {
     "npm": ">=10.9.2",

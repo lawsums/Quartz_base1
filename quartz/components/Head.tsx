@@ -109,6 +109,8 @@ export default (() => {
         {/* 番剧/漫画卡片 CSS/JS */}
         <link rel="stylesheet" href="/static/project-styles.css" />
         <script src="/static/project-query.js" defer></script>
+        {/* 预加载卡片数据，避免首次渲染白屏 */}
+        <link rel="preload" href="/static/projects-index.json" as="fetch" crossOrigin="anonymous" />
       </head>
     )
   }
