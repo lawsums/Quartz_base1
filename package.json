@@ -23,7 +23,8 @@
     "cache-covers": "node scripts/cache-covers.js",
     "generate-anime-pages": "node scripts/generate-anime-pages.js",
     "fetch-game": "node scripts/fetch-game.js",
-    "prebuild": "npm run install-plugins && npm run generate-projects && npm run cache-covers && npm run generate-anime-pages"
+    "prebuild": "npm run install-plugins && npm run generate-projects && npm run cache-covers && npm run generate-anime-pages",
+    "build": "npx quartz build"
   },
   "engines": {
     "npm": ">=10.9.2",
