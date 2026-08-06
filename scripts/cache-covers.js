@@ -80,7 +80,7 @@ function getLocalPath(url) {
   const ext = getExtension(url)
   return {
     filename: `${hash}${ext}`,
-    webPath: `/static/covers/${hash}${ext}`,
+    webPath: `./static/covers/${hash}${ext}`,
     localPath: join(COVERS_DIR, `${hash}${ext}`),
   }
 }
@@ -118,11 +118,11 @@ async function cacheCovers() {
   }
 
   // 筛选需要处理的条目
-  const toProcess = data.filter((item) => item.cover && !item.cover.startsWith("/static/"))
+  const toProcess = data.filter((item) => item.cover && !item.cover.startsWith("./static/"))
 
   if (toProcess.length === 0) {
     // 检查已有的本地缓存是否仍然有效
-    const alreadyLocal = data.filter((item) => item.cover && item.cover.startsWith("/static/"))
+    const alreadyLocal = data.filter((item) => item.cover && item.cover.startsWith("./static/"))
     console.log(`[cache-covers] 所有 ${alreadyLocal.length} 个封面已是本地路径，无需下载`)
     return
   }
@@ -163,8 +163,8 @@ async function cacheCovers() {
   writeFileSync(JSON_FILE, JSON.stringify(data, null, 2), "utf-8")
 
   // 统计
-  const totalLocal = data.filter((d) => d.cover && d.cover.startsWith("/static/")).length
-  const totalRemote = data.filter((d) => d.cover && !d.cover.startsWith("/static/")).length
+  const totalLocal = data.filter((d) => d.cover && d.cover.startsWith("./static/")).length
+  const totalRemote = data.filter((d) => d.cover && !d.cover.startsWith("./static/")).length
 
   console.log(`[cache-covers] 完成: ${downloaded} 新下载, ${skipped} 已缓存跳过, ${failed} 失败`)
   console.log(`[cache-covers] 当前状态: ${totalLocal} 本地, ${totalRemote} 远程`)

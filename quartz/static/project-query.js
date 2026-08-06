@@ -18,7 +18,7 @@
   // 卡片占位符选择器
   const QUERY_SELECTOR = "[data-project-query]"
   // JSON 数据路径
-  const JSON_URL = "/static/projects-index.json"
+  const JSON_URL = "./static/projects-index.json"
 
   /**
    * 获取 URL 友好的路径（处理空格和特殊字符）
