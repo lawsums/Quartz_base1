@@ -819,7 +819,7 @@
     "title": "其实我是",
     "subtitle": "実は私は",
     "cover": "./static/covers/067303d4951228bd.jpg",
-    "status": "想看",
+    "status": "已看",
     "rating": 6,
     "tags": [
       "喜剧",
@@ -1169,6 +1169,30 @@
     "category": "anime",
     "path": "/projects/anime/无神世界的神明活动",
     "noteId": "20260721224457"
+  },
+  {
+    "title": "无职转生 第三季 ～到了异世界就拿出真本事～",
+    "subtitle": "無職転生Ⅲ ～異世界行ったら本気だす～",
+    "cover": "https://lain.bgm.tv/pic/cover/l/1f/9e/501963_bXlEP.jpg",
+    "status": "想看",
+    "rating": 7.9,
+    "tags": [
+      "后宫",
+      "TV",
+      "日本",
+      "奇幻",
+      "冒险",
+      "小说改"
+    ],
+    "episodes": "14",
+    "year": "2026",
+    "studio": "スタジオバインド",
+    "platform": "",
+    "genre": "",
+    "playtime": "",
+    "category": "anime",
+    "path": "/projects/anime/无职转生-第三季-～到了异世界就拿出真本事～",
+    "noteId": "20260807220249"
   },
   {
     "title": "五等分的新娘",
