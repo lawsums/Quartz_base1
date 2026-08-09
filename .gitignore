@@ -15,3 +15,6 @@ quartz/cli/tui/dist/
 # 本地同步脚本与日志（不提交）
 scripts/rawg-config.json
 *.log
+
+# WorkBuddy 本地记忆（不提交）
+.workbuddy/

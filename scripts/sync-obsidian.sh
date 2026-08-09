@@ -47,9 +47,9 @@ echo "[1/6] 镜像复制 Leetcode：$LC_SOURCE -> $LC_TARGET"
 if [ ! -d "$LC_SOURCE" ]; then
   echo "警告：Leetcode 源目录不存在：$LC_SOURCE，跳过"
 else
-  # 排除：*.swp/*.swo（vim交换文件）、1-9.md（Templater模板，含非法YAML）
+  # 排除：*.swp/*.swo（vim交换文件）、1-9.md + LeetCode模板草稿.md（Templater模板，含非法YAML）
   # 注意：robocopy /XF 不支持 [1-9] 字符范围，必须逐个列出
-  robocopy "$LC_SOURCE" "$LC_TARGET" /MIR /XJ /XF *.swp *.swo 1.md 2.md 3.md 4.md 5.md 6.md 7.md 8.md 9.md /XD .obsidian .git /R:1 /W:1 /NP
+  robocopy "$LC_SOURCE" "$LC_TARGET" /MIR /XJ /XF *.swp *.swo 1.md 2.md 3.md 4.md 5.md 6.md 7.md 8.md 9.md "LeetCode模板草稿.md" /XD .obsidian .git /R:1 /W:1 /NP
   robocopy_exit=$?
 
   if [ $robocopy_exit -ge 8 ]; then
@@ -62,6 +62,18 @@ else
   echo "  清理 ![[*.cpp]] 嵌入..."
   find "$LC_TARGET" -name '*.md' -exec sed -i '/!\[\[[^]]*\.cpp\]\]/d' {} +
   echo "  已清理 Leetcode .md 文件"
+
+  # 清理 Templater 模板文件（frontmatter 含 <% 代码，会导致 Quartz 构建崩溃）
+  echo "  清理 Templater 模板文件..."
+  templater_cleaned=0
+  while IFS= read -r -d '' f; do
+    if head -3 "$f" | grep -q '<%'; then
+      echo "  删除 Templater 文件：$(basename "$f")"
+      rm -f "$f"
+      templater_cleaned=$((templater_cleaned + 1))
+    fi
+  done < <(find "$LC_TARGET" -name '*.md' -print0)
+  echo "  已清理 $templater_cleaned 个 Templater 文件"
 fi
 
 # ==================== 步骤 2：同步 Projects ====================
