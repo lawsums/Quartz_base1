@@ -49,8 +49,24 @@ function generate() {
   const jsonStr = JSON.stringify(animeData)
   let template = readFileSync(TEMPLATE_FILE, "utf-8")
 
-  if (template.includes("PLACEHOLDER_JSON")) {
+  // 始终替换 <script id="projects-data"> 内的 JSON，不依赖 PLACEHOLDER_JSON 占位符
+  // 避免"上次已替换→下次匹配不到占位符→静默跳过→数据永远不更新"的 bug
+  const scriptBlockRegex = /<script id="projects-data" type="application\/json">[\s\S]*?<\/script>/
+  const replacement = `<script id="projects-data" type="application/json">\n${jsonStr}\n</script>`
+
+  if (scriptBlockRegex.test(template)) {
+    const oldData = template.match(scriptBlockRegex)[0]
+    template = template.replace(oldData, replacement)
+    console.log(`[generate-anime-pages] 已替换 <script data> 块`)
+  } else if (template.includes("PLACEHOLDER_JSON")) {
+    // 向后兼容：如果模板还是旧的 PLACEHOLDER 格式
     template = template.replace("PLACEHOLDER_JSON", jsonStr)
+    console.log(`[generate-anime-pages] 已替换 PLACEHOLDER_JSON`)
+  } else {
+    console.error(
+      "[generate-anime-pages] 番剧库.md 中未找到 <script id=\"projects-data\"> 或 PLACEHOLDER_JSON，" +
+      "请确保模板包含正确的占位标记"
+    )
   }
 
   writeFileSync(TEMPLATE_FILE, template, "utf-8")
