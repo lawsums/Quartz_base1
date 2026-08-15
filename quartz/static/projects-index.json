@@ -167,6 +167,28 @@
     "noteId": "20260727221943"
   },
   {
+    "title": "恶女不才，请多关照 ～雏宫蝶鼠换身传～",
+    "subtitle": "ふつつかな悪女ではございますが ～雛宮蝶鼠とりかえ伝～",
+    "cover": "https://lain.bgm.tv/pic/cover/l/14/a1/545008_pNnzQ.jpg",
+    "status": "想看",
+    "rating": 7,
+    "tags": [
+      "TV",
+      "日本",
+      "奇幻",
+      "小说改"
+    ],
+    "episodes": "11",
+    "year": "2026",
+    "studio": "動画工房",
+    "platform": "",
+    "genre": "",
+    "playtime": "",
+    "category": "anime",
+    "path": "/projects/anime/恶女不才，请多关照-～雏宫蝶鼠换身传～",
+    "noteId": "20260810182500"
+  },
+  {
     "title": "凡人修仙传 第五季",
     "subtitle": "凡人修仙传 第五季",
     "cover": "./static/covers/01c4370f19035611.jpg",
@@ -1365,6 +1387,52 @@
     "category": "manga",
     "path": "/projects/manga/战队红战士在异世界当冒险者",
     "noteId": "20260730201347"
+  },
+  {
+    "title": "只有神知道的世界",
+    "subtitle": "神のみぞ知るセカイ",
+    "cover": "https://lain.bgm.tv/pic/cover/l/e1/05/5976_irRRH.jpg",
+    "status": "已看",
+    "rating": 7.2,
+    "tags": [
+      "后宫",
+      "TV",
+      "恋爱",
+      "日本",
+      "漫画改"
+    ],
+    "episodes": "12",
+    "year": "2010",
+    "studio": "Manglobe",
+    "platform": "",
+    "genre": "",
+    "playtime": "",
+    "category": "anime",
+    "path": "/projects/anime/只有神知道的世界",
+    "noteId": "20260814093935"
+  },
+  {
+    "title": "只有神知道的世界 女神篇",
+    "subtitle": "神のみぞ知るセカイ 女神篇",
+    "cover": "https://lain.bgm.tv/pic/cover/l/ab/e8/56112_QDldL.jpg",
+    "status": "想看",
+    "rating": 7.3,
+    "tags": [
+      "后宫",
+      "TV",
+      "恋爱",
+      "日本",
+      "漫画改"
+    ],
+    "episodes": "12",
+    "year": "2013",
+    "studio": "Manglobe",
+    "platform": "",
+    "genre": "",
+    "playtime": "",
+    "category": "anime",
+    "path": "/projects/anime/只有神知道的世界-女神篇",
+    "noteId": "20260814094016"
   },
   {
     "title": "主播女孩重度依赖",
