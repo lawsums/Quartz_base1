@@ -3,53 +3,47 @@
 #include <queue>
 using namespace std;
 
-typedef array<int, 2> aii;
-
-// Dijkstra算法模版
+// Dijkstra 模板题：LeetCode 743. 网络延迟时间
+// 单源最短路（源点 k），边权非负 → 小根堆优化的 Dijkstra
 class Solution {
+private:
+    vector<vector<pair<int, int>>> g;
+
 public:
-    int networkDelayTime(vector<vector<int>>& times, int n, int s) {
-        vector<vector<aii>> graph(n + 1, vector<aii>());
-        for (const auto &edge : times) {
-            graph[edge[0]].push_back({edge[1], edge[2]}); 
+    void build(vector<vector<int>>& times, int n) {
+        g.assign(n + 1, vector<pair<int, int>>{});
+        for (auto &time : times) {
+            auto u = time[0], v = time[1], w = time[2];
+            g[u].push_back({v, w});
         }
+    }
 
-        vector<int> distance(n + 1, INT_MAX);
+    int networkDelayTime(vector<vector<int>>& times, int n, int k) {
+        build(times, n);
+
+        // g[u] = {(v, w), ...}, 点编号 1 ~ n
+        vector<int> dist(n + 1, INT_MAX);
         vector<bool> visited(n + 1, false);
-        distance[s] = 0; // 初始自己的距离是0
+        // 小根堆, 按距离升序
+        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<>> heap;
 
-        auto cmp = [](aii& a, aii& b) { return a[1] > b[1]; }; // 小根堆
-        priority_queue<aii, vector<aii>, decltype(cmp)> pq(cmp);
-
-        // 将初始的s加入pq, 距离为零
-        pq.push({s, 0});
-        while (!pq.empty()) {
-            int u = pq.top()[0]; pq.pop(); // 自动选取权值最小的边
-            if (visited[u]) {
-                continue;
-            }
-
-            for (const auto &edge : graph[u]) {
-                auto [v, w] = edge;
-                if (!visited[v] && distance[u] + w < distance[v]) { // 如果值更小的话就更新
-                    distance[v] = distance[u] + w; // 说明s到u再到v的路径比原先到v的路径更短
-                    pq.push({v, distance[v]});
+        int start = k;
+        dist[start] = 0;
+        heap.push({0, start});
+        while (!heap.empty()) {
+            auto [d, u] = heap.top(); heap.pop();
+            if (visited[u]) continue;   // 一个点可能被压入多次, 旧的记录直接跳过
+            visited[u] = true;          // 出堆即定案, d 就是 start->u 的最短路
+            for (auto [v, w] : g[u]) {
+                if (!visited[v] && d + w < dist[v]) {
+                    dist[v] = d + w;
+                    heap.push({dist[v], v});
                 }
             }
         }
 
-        int ans = INT_MIN;
-        // 寻找所有点中的距离最大值
-        for (int i = 1; i <= n; i++) {
-            if (distance[i] == INT_MAX) {
-                return -1;
-            }
-            ans = max(ans, distance[i]);
-        }
-        return ans;
+        // 本题要求: 所有点都收到信号 -> 取所有最短距离的最大值; 有不可达点则返回 -1
+        int ans = *max_element(dist.begin() + 1, dist.end());
+        return ans == INT_MAX ? -1 : ans;
     }
-
-    // 改进版(获取路径)
 };
-
-
